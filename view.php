@@ -3,8 +3,7 @@ require 'connect.php';
 session_start();
 if($_SESSION['status']=='loggedin')
 {
-	$email = $_SESSION['user_email'];
-	               
+	$email = $_SESSION['user_email'];    
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,40 +19,24 @@ if($_SESSION['status']=='loggedin')
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="db">
+<body class="db" onload="enableEditMode()">
 <div class="left col-md-11">
-
-	<input type="text" id="searchBox" class="form-control header" onkeyup="search()" placeholder="Search by Title...">
-	<table class="recentNotes table" id="recentNotes">
-	<thead class="thead-pink">
-		<tr>
-			<th scope="col">Date</th>
-			<th scope="col">Note</th>
-			<th scope="col"></th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php
-		$sqlquery = "SELECT * FROM usernote WHERE email ='".$email."';";
-		$res = mysqli_query($conn,$sqlquery);   
-		$rows = mysqli_num_rows($res);                             
-    	for($i=0;$i<$rows;$i++) 
-    	{        
-    		$tablerow = mysqli_fetch_assoc($res); 
-    		$originalDate = $tablerow['uploadDate'];
-			$newDate = date("d-m-Y", strtotime($originalDate));                   	
-			echo '<tr>
-					<td>'.$newDate.'</td>
-					<td>'.$tablerow["title"].'</td>
-					<td width="100"><form action="view.php" method="GET">
-						<input type="hidden" name="noteID" value="'.$tablerow["noteID"].'">
-						<input type="submit" name="viewBtn" value="View" class="viewBtn">
-						</form></td></tr>';
-  		} 
-
-		?>
-	</tbody>
-</table>
+	<?php
+	if(isset($_GET["viewBtn"]))
+	{
+		$postid = $_GET["noteID"];
+		$sqlquery = "SELECT * FROM usernote WHERE noteId =".$postid;
+		$res = mysqli_query($conn,$sqlquery);         
+    	$data = mysqli_fetch_assoc($res); 
+    	$originalDate = $data['uploadDate'];
+		$newDate = date("d-m-Y", strtotime($originalDate));  
+		$title = $data['title'];	
+		$txt = $data['noteBody'];
+		echo '<h2 class="pageTitle">'.$title.'</h2>';
+		echo '<p class="subtitle">Created on '.$newDate.'</p>';
+		echo '<div class="form-control viewtab"><div class="viewtabContent"><div class="viewText">'.$txt.'</div></div></div>';
+	}
+	?>
 </div>
 <div class="right col-md-1">
 	<p>Hi, 
@@ -66,39 +49,12 @@ if($_SESSION['status']=='loggedin')
   		}                                                   
 	?>
 	</p>
-	<!-- Add note button -->
-	<a class="newBtn" href="newnote.php"><i class="fas fa-plus"></i></a>
+	
 	<!-- logout button -->
 	<a class="logoutBtn" href="logout.php">Logout</a>
 </div>
 
 </body>
-<script type="text/javascript">
-function search() 
-{
-	var input, filter, table, tr, td, i, txtValue;
-	input = document.getElementById("searchBox");
-	filter = input.value.toUpperCase();
-	table = document.getElementById("recentNotes");
-	tr = table.getElementsByTagName("tr");
-	for (i = 0; i < tr.length; i++) 
-	{
-		td = tr[i].getElementsByTagName("td")[1];
-		if(td) 
-		{
-				txtValue = td.textContent || td.innerText;
-				if (txtValue.toUpperCase().indexOf(filter) > -1) 
-				{
-					tr[i].style.display = "";
-				} 
-				else 
-				{
-					tr[i].style.display = "none";
-				}
-		}       
-	}
-}
-</script>
 </html>
 
 <?php
@@ -107,5 +63,6 @@ else
 {
   header("location:index.php"); 
 }
+
 mysqli_close($conn);
 ?>
