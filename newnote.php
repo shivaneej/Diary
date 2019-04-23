@@ -61,7 +61,7 @@ if($_SESSION['status']=='loggedin')
 		richTextField.document.designMode="On";
 	}
 	function iImage(){
-	var imgSrc = prompt('Enter image location', '');
+	var imgSrc = prompt('Enter image url', '');
     if(imgSrc != null){
         richTextField.document.execCommand('insertimage', false, imgSrc); 
     }

@@ -35,8 +35,23 @@ if($_SESSION['status']=='loggedin')
 		echo '<h2 class="pageTitle">'.$title.'</h2>';
 		echo '<p class="subtitle">Created on '.$newDate.'</p>';
 		echo '<div class="form-control viewtab"><div class="viewtabContent"><div class="viewText">'.$txt.'</div></div></div>';
+		echo '<form action="#" method="GET">
+				<input type="hidden" name="deletenoteID" value="'.$postid.'">
+				<input type="submit" name="deleteBtn" value="Delete this note" class="viewBtn" id="delBtn">
+				</form>';
+	}
+	if(isset($_GET["deleteBtn"]))
+	{
+		$post = $_GET["deletenoteID"];
+		$sqlquery = "DELETE FROM usernote WHERE noteID =".$post;
+		$res = mysqli_query($conn,$sqlquery);  
+		if($res)
+		{
+			 echo "<script type='text/javascript'>alert('Note Deleted Succesfully!'); window.location='dashboard.php'</script>";
+		}
 	}
 	?>
+	
 </div>
 <div class="right col-md-1">
 	<p>Hi, 

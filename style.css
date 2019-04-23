@@ -277,3 +277,10 @@ h1
 	color: #ff8D8d;
 	background-color: transparent;
 }
+
+#delBtn
+{
+	text-align: center;
+	width: 100%;
+	margin-top: 2%;
+}
