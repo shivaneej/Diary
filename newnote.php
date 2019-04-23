@@ -84,7 +84,7 @@ if(isset($_POST["createNote"]))
 {
 	$title = $_POST["textTitle"];
 	$txt = $_POST["TextArea"];
-	$date = date("Y/m/d");
+	$date = date("Y/m/d H:i");
 	$sqlquery = "INSERT INTO userNote (email,uploadDate,title,noteBody) VALUES ('".$email."','".$date."','".$title."','".$txt."')";
 	if ($conn->query($sqlquery) === TRUE) 
     {

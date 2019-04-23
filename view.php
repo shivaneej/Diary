@@ -29,7 +29,7 @@ if($_SESSION['status']=='loggedin')
 		$res = mysqli_query($conn,$sqlquery);         
     	$data = mysqli_fetch_assoc($res); 
     	$originalDate = $data['uploadDate'];
-		$newDate = date("d-m-Y", strtotime($originalDate));  
+		$newDate = date("d-m-Y h:i a", strtotime($originalDate));  
 		$title = $data['title'];	
 		$txt = $data['noteBody'];
 		echo '<h2 class="pageTitle">'.$title.'</h2>';

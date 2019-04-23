@@ -27,8 +27,8 @@ if($_SESSION['status']=='loggedin')
 	<table class="recentNotes table" id="recentNotes">
 	<thead class="thead-pink">
 		<tr>
-			<th scope="col">Date</th>
-			<th scope="col">Note</th>
+			<th scope="col" onclick="sortTable(0)">Date <i class="fas fa-sort"></i></th>
+			<th scope="col" onclick="sortTable(1)">Note <i class="fas fa-sort"></i></th>
 			<th scope="col"></th>
 		</tr>
 	</thead>
@@ -41,7 +41,7 @@ if($_SESSION['status']=='loggedin')
     	{        
     		$tablerow = mysqli_fetch_assoc($res); 
     		$originalDate = $tablerow['uploadDate'];
-			$newDate = date("d-m-Y", strtotime($originalDate));                   	
+			$newDate = date("d-m-Y h:i a", strtotime($originalDate));                   	
 			echo '<tr>
 					<td>'.$newDate.'</td>
 					<td>'.$tablerow["title"].'</td>
@@ -74,12 +74,12 @@ if($_SESSION['status']=='loggedin')
 
 </body>
 <script type="text/javascript">
+var table = document.getElementById("recentNotes");
 function search() 
 {
-	var input, filter, table, tr, td, i, txtValue;
+	var input, filter, tr, td, i, txtValue;
 	input = document.getElementById("searchBox");
 	filter = input.value.toUpperCase();
-	table = document.getElementById("recentNotes");
 	tr = table.getElementsByTagName("tr");
 	for (i = 0; i < tr.length; i++) 
 	{
@@ -98,6 +98,56 @@ function search()
 		}       
 	}
 }
+
+function sortTable(n)
+{
+	var rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  	switching = true;
+  	dir = "asc"; 
+  	while (switching)
+  	{
+  		switching = false;
+    	rows = table.rows;
+    	for (i = 1; i < (rows.length - 1); i++) 
+    	{
+      		shouldSwitch = false;
+      		x = rows[i].getElementsByTagName("TD")[n];
+      		y = rows[i + 1].getElementsByTagName("TD")[n];
+      		if (dir == "asc") 
+      		{
+        		if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) 
+        		{
+          			shouldSwitch= true;
+          			break;
+        		}
+      		}
+      		else if (dir == "desc") 
+      		{
+        		if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) 
+        		{
+          			shouldSwitch = true;
+          			break;
+        		}
+      		}
+    	}
+    	if (shouldSwitch) 
+    	{
+      		rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      		switching = true;
+      		switchcount ++;      
+    	} 
+    	else 
+    	{
+      		if (switchcount == 0 && dir == "asc") 
+      		{
+        		dir = "desc";
+        		switching = true;
+      		}
+    	}
+  	}
+}
+
+         
 </script>
 </html>
 

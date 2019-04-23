@@ -284,3 +284,7 @@ h1
 	width: 100%;
 	margin-top: 2%;
 }
+th:hover
+{
+	cursor: pointer;
+}
