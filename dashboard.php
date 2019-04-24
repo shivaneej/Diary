@@ -34,7 +34,7 @@ if($_SESSION['status']=='loggedin')
 	</thead>
 	<tbody>
 		<?php
-		$sqlquery = "SELECT * FROM usernote WHERE email ='".$email."';";
+		$sqlquery = "SELECT * FROM usernote WHERE email ='".$email."' ORDER BY uploadDate DESC;";
 		$res = mysqli_query($conn,$sqlquery);   
 		$rows = mysqli_num_rows($res);                             
     	for($i=0;$i<$rows;$i++) 
